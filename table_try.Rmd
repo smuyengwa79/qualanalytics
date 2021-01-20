@@ -1,0 +1,25 @@
+---
+title: "Summary tables"
+author: "Shylock Muyengwa"
+date: "02/12/2020"
+output: html_document
+---
+
+```{r results='asis'}
+dat <- data.frame(
+  country = c('Europe', 'Finland', "Germany", "Ireland", "Netherlands", "Sweden", "Switzerland", "United Kingdom"),
+  abbr = c('eu', 'fi', 'de', 'ie', "nl", "se", 'ch', "en"),
+  Active = c(5, 0, 1, 0, 1, 13, 1, 1),
+  Completed = c(7,2, 7, 7, 3, 13, 7, 18)
+)
+dat$flag <- sprintf('![](http://flagpedia.net/data/flags/mini/%s.png)', dat$abbr)
+library(tidyverse)
+dat2 <- dat %>% select(country, flag, Active, Completed)
+library(knitr)
+x <-kable(dat2, 
+          col.names = c("Country", "", "Active", "Completed"), 
+          align = c("r", "l", "l", "l")) %>% 
+  kableExtra::kable_material_dark()
+  kableExtra::add_header_above(x, c("Country" = 2 , "Number of  projects funded over the years" =2))
+
+```

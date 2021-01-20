@@ -1,0 +1,347 @@
+---
+title: "Untitled"
+author: "Shylock"
+date: "12/17/2020"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE, warning=FALSE, comment= FALSE, }
+knitr::opts_chunk$set(echo = FALSE)
+# library(qcoder)
+library(tidyverse)
+library(janitor)
+library(bbplot)
+library(gt)
+suppressWarnings(library(readxl))
+library(knitr)
+
+
+
+```
+
+# All donor funded programs
+```{r, results='asis', message=FALSE, warning=FALSE}
+
+
+clean_data <- read_excel("NGO EXCEL.xlsx",
+                         col_types = c("text", "text", "text",
+                                       "text", "text", "numeric")) %>%
+  clean_names()
+
+data <-
+  clean_data %>%
+  group_by(development, date) %>%
+  tally() %>%
+  arrange(desc(n)) %>%
+  pivot_wider(names_from = date, values_from = n)
+kable(data)
+
+```
+
+# All funding by years
+```{r}
+summ1 <- clean_data %>%
+  group_by(date, development) %>%
+  summarise(budget = sum(project_budget)) %>%
+  pivot_wider(names_from = date,
+              values_from = budget,
+              values_fill = 0)
+kable(summ1)
+```
+# Social Protection (N)
+
+```{r}
+sp <- clean_data %>%
+  filter(nexus == "Social protection")
+
+sp_n <- sp %>%
+  group_by(date, development, project_status) %>%
+  tally() %>%
+  pivot_wider(names_from = project_status,
+              values_from = n,
+              values_fill = 0)
+kable(sp_n)
+```
+
+# Social protection (Value)
+```{r}
+sp_v <- clean_data %>%
+  filter(nexus == "Social protection") %>%
+  group_by(date, development) %>%
+  summarise(budget = sum(project_budget)) %>%
+  pivot_wider(names_from = date,
+              values_from = budget,
+              values_fill = 0)
+kable(sp_v)
+```
+
+
+# Resilience (N)
+
+```{r}
+resilence <- clean_data %>%
+  filter(nexus == "Resilience Humanitarian and Development")
+
+a <- resilence %>%
+  group_by(date, development, project_status) %>%
+  tally() %>%
+  pivot_wider(names_from = project_status,
+              values_from = n,
+              values_fill = 0)
+kable(a)
+```
+
+
+# Resilience (Value)
+
+```{r}
+res_v <- clean_data %>%
+  filter(nexus == "Resilience Humanitarian and Development") %>%
+  group_by(date, development) %>%
+  summarise(budget = sum(project_budget)) %>%
+  pivot_wider(names_from = date,
+              values_from = budget,
+              values_fill = 0)
+kable(res_v)
+```
+
+
+
+# Governance(N)
+
+```{r}
+gov <- clean_data %>%
+  filter(nexus == "GOVernance, human rights, democracy and rule of law")
+
+a <- gov %>%
+  group_by(date, development, project_status) %>%
+  tally() %>%
+  pivot_wider(names_from = project_status,
+              values_from = n,
+              values_fill = 0)
+kable(a)
+```
+
+
+# Governance (Value)
+
+```{r}
+gov_v <- clean_data %>%
+  filter(nexus == "GOVernance, human rights, democracy and rule of law") %>%
+  group_by(date, development) %>%
+  summarise(budget = sum(project_budget)) %>%
+  pivot_wider(names_from = date,
+              values_from = budget,
+              values_fill = 0)
+kable(gov_v)
+```
+
+
+
+# Agriculture and climate change (N)
+
+```{r}
+agric <- clean_data %>%
+  filter(nexus == "Agriculture and climate change")
+
+a <- agric %>%
+  group_by(date, development, project_status) %>%
+  tally() %>%
+  pivot_wider(names_from = project_status,
+              values_from = n,
+              values_fill = 0)
+kable(a)
+```
+
+
+# Agriculture and climate change (Value)
+
+```{r}
+agric_v <- clean_data %>%
+  filter(nexus == "Agriculture and climate change") %>%
+  group_by(date, development) %>%
+  summarise(budget = sum(project_budget)) %>%
+  pivot_wider(names_from = date,
+              values_from = budget,
+              values_fill = 0)
+kable(agric_v)
+```
+
+
+#  Natural resources management (N)
+
+```{r}
+nrm <- clean_data %>%
+  filter(nexus == "Natural resources management")
+
+a <- nrm %>%
+  group_by(date, development, project_status) %>%
+  tally() %>%
+  pivot_wider(names_from = project_status,
+              values_from = n,
+              values_fill = 0)
+kable(a)
+```
+
+
+# Natural resources management (Value)
+
+```{r}
+nrm_v <- clean_data %>%
+  filter(nexus == "Natural resources management") %>%
+  group_by(date, development) %>%
+  summarise(budget = sum(project_budget)) %>%
+  pivot_wider(names_from = date,
+              values_from = budget,
+              values_fill = 0)
+kable(nrm_v)
+```
+
+#  Education sector (N)
+
+```{r}
+edu <- clean_data %>%
+  filter(nexus == "Education sector")
+
+a <- edu %>%
+  group_by(date, development, project_status) %>%
+  tally() %>%
+  pivot_wider(names_from = project_status,
+              values_from = n,
+              values_fill = 0)
+kable(a)
+```
+
+
+# Education sector (Value)
+
+```{r}
+edu_v <- clean_data %>%
+  filter(nexus == "Education sector") %>%
+  group_by(date, development) %>%
+  summarise(budget = sum(project_budget)) %>%
+  pivot_wider(names_from = date,
+              values_from = budget,
+              values_fill = 0)
+kable(edu_v)
+```
+
+#   Gender issues (N)
+
+```{r}
+gen <- clean_data %>%
+  filter(nexus == "Gender issues")
+
+a <- gen %>%
+  group_by(date, development, project_status) %>%
+  tally() %>%
+  pivot_wider(names_from = project_status,
+              values_from = n,
+              values_fill = 0)
+kable(a)
+```
+
+
+#  Gender issues (Value)
+
+```{r}
+gen_v <- clean_data %>%
+  filter(nexus == "Gender issues") %>%
+  group_by(date, development) %>%
+  summarise(budget = sum(project_budget)) %>%
+  pivot_wider(names_from = date,
+              values_from = budget,
+              values_fill = 0)
+kable(gen_v)
+```
+
+#   Health sector (N)
+
+```{r}
+heal <- clean_data %>%
+  filter(nexus == "Health sector")
+
+a <- heal %>%
+  group_by(date, development, project_status) %>%
+  tally() %>%
+  pivot_wider(names_from = project_status,
+              values_from = n,
+              values_fill = 0)
+kable(a)
+```
+
+
+#  Health sector (Value)
+
+```{r, echo= FALSE}
+heal_v <- clean_data %>%
+  filter(nexus == "Health sector") %>%
+  group_by(date, development) %>%
+  summarise(budget = sum(project_budget)) %>%
+  pivot_wider(names_from = date,
+              values_from = budget,
+              values_fill = 0)
+kable(heal_v)
+```
+
+
+#   Private sector and trade (N)
+
+```{r}
+pvt <- clean_data %>%
+  filter(nexus == "Private sector and trade")
+
+a <- pvt %>%
+  group_by(date, development, project_status) %>%
+  tally() %>%
+  pivot_wider(names_from = project_status,
+              values_from = n,
+              values_fill = 0)
+kable(a)
+```
+
+
+#  Private sector and trade (Value)
+
+```{r, echo= FALSE}
+pvt_v <- clean_data %>%
+  filter(nexus == "Private sector and trade") %>%
+  group_by(date, development) %>%
+  summarise(budget = sum(project_budget)) %>%
+  pivot_wider(names_from = date,
+              values_from = budget,
+              values_fill = 0)
+kable(pvt_v)
+```
+
+
+#   SMEs and employment creation (N)
+
+```{r}
+sme <- clean_data %>%
+  filter(nexus == "SMEs and employment creation")
+
+a <- sme %>%
+  group_by(date, development, project_status) %>%
+  tally() %>%
+  pivot_wider(names_from = project_status,
+              values_from = n,
+              values_fill = 0)
+kable(a)
+```
+
+
+#  SMEs and employment creation (Value)
+
+```{r, echo= FALSE}
+sme_v <- clean_data %>%
+  filter(nexus == "SMEs and employment creation") %>%
+  group_by(date, development) %>%
+  summarise(budget = sum(project_budget)) %>%
+  pivot_wider(names_from = date,
+              values_from = budget,
+              values_fill = 0)
+kable(sme_v)
+```
