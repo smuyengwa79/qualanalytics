@@ -23,19 +23,28 @@ library(knitr)
 
 # All donor funded programs
 ```{r, results='asis', message=FALSE, warning=FALSE}
-
-
-clean_data <- read_excel("NGO EXCEL.xlsx",
-                         col_types = c("text", "text", "text",
-                                       "text", "text", "numeric")) %>%
+clean_data <- read_excel("Donors.xlsx",
+                        col_types = c("text", "text", "text", 
+                                      "text", "text", "numeric",
+                                      "text", "text")) %>% 
   clean_names()
 
+
+## Recoding clean_data$development into clean_data$development_rec
+clean_data$development <- fct_recode(clean_data$development,
+  "EU" = "EU/EC",
+  "UK" = "United Kingdom"
+)
+
+
+
 data <-
-  clean_data %>%
-  group_by(development, date) %>%
-  tally() %>%
+  clean_data %>% 
+  group_by(development, date) %>% 
+  tally() %>% 
   arrange(desc(n)) %>%
   pivot_wider(names_from = date, values_from = n)
+
 kable(data)
 
 ```
@@ -54,7 +63,7 @@ kable(summ1)
 
 ```{r}
 sp <- clean_data %>%
-  filter(nexus == "Social protection")
+  filter(sector == "Social Protection")
 
 sp_n <- sp %>%
   group_by(date, development, project_status) %>%
@@ -68,7 +77,7 @@ kable(sp_n)
 # Social protection (Value)
 ```{r}
 sp_v <- clean_data %>%
-  filter(nexus == "Social protection") %>%
+  filter(sector == "Social Protection") %>%
   group_by(date, development) %>%
   summarise(budget = sum(project_budget)) %>%
   pivot_wider(names_from = date,
@@ -82,7 +91,7 @@ kable(sp_v)
 
 ```{r}
 resilence <- clean_data %>%
-  filter(nexus == "Resilience Humanitarian and Development")
+  filter(sector == "Resilience, Humanitarian and Development")
 
 a <- resilence %>%
   group_by(date, development, project_status) %>%
@@ -98,7 +107,7 @@ kable(a)
 
 ```{r}
 res_v <- clean_data %>%
-  filter(nexus == "Resilience Humanitarian and Development") %>%
+  filter(sector == "Resilience, Humanitarian and Development") %>%
   group_by(date, development) %>%
   summarise(budget = sum(project_budget)) %>%
   pivot_wider(names_from = date,
@@ -113,7 +122,7 @@ kable(res_v)
 
 ```{r}
 gov <- clean_data %>%
-  filter(nexus == "GOVernance, human rights, democracy and rule of law")
+  filter(sector == "Governance, Human Rights, Democracy and Rule of Law")
 
 a <- gov %>%
   group_by(date, development, project_status) %>%
@@ -129,7 +138,7 @@ kable(a)
 
 ```{r}
 gov_v <- clean_data %>%
-  filter(nexus == "GOVernance, human rights, democracy and rule of law") %>%
+  filter(sector == "Governance, Human Rights, Democracy and Rule of Law") %>%
   group_by(date, development) %>%
   summarise(budget = sum(project_budget)) %>%
   pivot_wider(names_from = date,
@@ -144,7 +153,7 @@ kable(gov_v)
 
 ```{r}
 agric <- clean_data %>%
-  filter(nexus == "Agriculture and climate change")
+  filter(sector == "Agriculture and Climate Change")
 
 a <- agric %>%
   group_by(date, development, project_status) %>%
@@ -160,7 +169,7 @@ kable(a)
 
 ```{r}
 agric_v <- clean_data %>%
-  filter(nexus == "Agriculture and climate change") %>%
+  filter(sector == "Agriculture and Climate Change") %>%
   group_by(date, development) %>%
   summarise(budget = sum(project_budget)) %>%
   pivot_wider(names_from = date,
@@ -174,7 +183,7 @@ kable(agric_v)
 
 ```{r}
 nrm <- clean_data %>%
-  filter(nexus == "Natural resources management")
+  filter(sector == "Natural resource Management")
 
 a <- nrm %>%
   group_by(date, development, project_status) %>%
@@ -190,7 +199,7 @@ kable(a)
 
 ```{r}
 nrm_v <- clean_data %>%
-  filter(nexus == "Natural resources management") %>%
+  filter(sector == "Natural resource Management") %>%
   group_by(date, development) %>%
   summarise(budget = sum(project_budget)) %>%
   pivot_wider(names_from = date,
@@ -203,7 +212,7 @@ kable(nrm_v)
 
 ```{r}
 edu <- clean_data %>%
-  filter(nexus == "Education sector")
+  filter(sector == "Education Sector")
 
 a <- edu %>%
   group_by(date, development, project_status) %>%
@@ -219,7 +228,7 @@ kable(a)
 
 ```{r}
 edu_v <- clean_data %>%
-  filter(nexus == "Education sector") %>%
+  filter(sector == "Education Sector") %>%
   group_by(date, development) %>%
   summarise(budget = sum(project_budget)) %>%
   pivot_wider(names_from = date,
@@ -232,7 +241,7 @@ kable(edu_v)
 
 ```{r}
 gen <- clean_data %>%
-  filter(nexus == "Gender issues")
+  filter(sector == "Gender Issues")
 
 a <- gen %>%
   group_by(date, development, project_status) %>%
@@ -248,7 +257,7 @@ kable(a)
 
 ```{r}
 gen_v <- clean_data %>%
-  filter(nexus == "Gender issues") %>%
+  filter(sector == "Gender Issues") %>%
   group_by(date, development) %>%
   summarise(budget = sum(project_budget)) %>%
   pivot_wider(names_from = date,
@@ -261,7 +270,7 @@ kable(gen_v)
 
 ```{r}
 heal <- clean_data %>%
-  filter(nexus == "Health sector")
+  filter(sector == "Health Sector")
 
 a <- heal %>%
   group_by(date, development, project_status) %>%
@@ -277,7 +286,7 @@ kable(a)
 
 ```{r, echo= FALSE}
 heal_v <- clean_data %>%
-  filter(nexus == "Health sector") %>%
+  filter(sector == "Health Sector") %>%
   group_by(date, development) %>%
   summarise(budget = sum(project_budget)) %>%
   pivot_wider(names_from = date,
@@ -291,7 +300,7 @@ kable(heal_v)
 
 ```{r}
 pvt <- clean_data %>%
-  filter(nexus == "Private sector and trade")
+  filter(sector == "Private Sector and Trade")
 
 a <- pvt %>%
   group_by(date, development, project_status) %>%
@@ -307,7 +316,7 @@ kable(a)
 
 ```{r, echo= FALSE}
 pvt_v <- clean_data %>%
-  filter(nexus == "Private sector and trade") %>%
+  filter(sector == "Private Sector and Trade") %>%
   group_by(date, development) %>%
   summarise(budget = sum(project_budget)) %>%
   pivot_wider(names_from = date,
@@ -321,7 +330,7 @@ kable(pvt_v)
 
 ```{r}
 sme <- clean_data %>%
-  filter(nexus == "SMEs and employment creation")
+  filter(sector == "SMEs and employment creation")
 
 a <- sme %>%
   group_by(date, development, project_status) %>%
@@ -337,7 +346,7 @@ kable(a)
 
 ```{r, echo= FALSE}
 sme_v <- clean_data %>%
-  filter(nexus == "SMEs and employment creation") %>%
+  filter(sector == "SMEs and Employment Creation") %>%
   group_by(date, development) %>%
   summarise(budget = sum(project_budget)) %>%
   pivot_wider(names_from = date,

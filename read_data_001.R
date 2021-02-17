@@ -1,24 +1,26 @@
-# library(qcoder)
 library(tidyverse)
 library(janitor)
 library(bbplot)
 library(gt)
 library(readxl)
-# create_qcoder_project("my_qcoder_project", sample = TRUE)
-# qcode()
 library(questionr)
 
-## Recoding all_sec$nexus into all_sec$nexus_rec
-clean_data <- read_excel("NGO EXCEL.xlsx",
+## Recoding all_sec$sector into all_sec$sector_rec
+clean_data <- read_excel("Donors.xlsx",
                         col_types = c("text", "text", "text", 
-                                      "text", "text", "numeric")) %>% 
+                                      "text", "text", "numeric",
+                                      "text", "text")) %>% 
   clean_names()
 
-clean_data$date <- fct_recode(clean_data$date,
-                                  "2018" = "2018.00",
-                                  "2019" = "2019.00",
-                                  "2020" = "2020.00"
+
+## Recoding clean_data$development into clean_data$development_rec
+clean_data$development <- fct_recode(clean_data$development,
+  "EU" = "EU/EC",
+  "UK" = "United Kingdom"
 )
+
+
+
 data <-
   clean_data %>% 
   group_by(development, date) %>% 
@@ -28,42 +30,42 @@ data <-
  
 
 
-# ggplot(pr_data, aes(development_partner, n, fill = project_status)) +
-  geom_col()
+# ggplot(pr_data, aes(development_partner, n, fill = project_status)) + geom_col()
 
 
 # Total value of aid
 
-clean_data %>% 
-  select(development, project_budget) %>% 
-  group_by(year, development) %>% 
+tv <- clean_data %>% 
+  select(date, development, project_budget) %>% 
+  group_by(date, development) %>% 
   summarise_all(funs(sum)) %>% 
-  arrange(desc(project_budget))
+  arrange(desc(project_budget)) %>% 
+  pivot_wider(names_from = date, values_from = project_budget)
 
 # All sectors
 all_sec <-
-  clean_data %>% 
-  group_by(nexus) %>% 
+  clean_data %>%
+  filter(!is.na(sector)) %>% 
+  group_by(sector) %>% 
   tally() 
 
-
-all_sec$nexus <- fct_recode(all_sec$nexus,
-                            "Agric & Climate" = "Agriculture and climate change",
-                            "Education" = "Education sector",
-                            "Gender" = "Gender issues",
-                            "Gov, HR, D & ROL" = "GOVernance, human rights, democracy and rule of law",
-                            "Health" = "Health sector",
-                            "NRM" = "Natural resources management",
-                            "Pvt Sector & Trade" = "Private sector and trade",
-                            "Resilience" = "Resilience Humanitarian and Development",
-                            "SMEs" = "SMEs and employment creation",
-                            "Social Protection" = "Social protection"
+all_sec$sector <- fct_recode(all_sec$sector,
+                           "Agric & Climate" = "Agriculture and Climate Change",
+                           "Education" = "Education Sector",
+                           "Gender" = "Gender Issues",
+                           "Gov, HR, D & ROL" = "Governance, Human Rights, Democracy and Rule of Law",
+                           "Health" = "Health Sector",
+                           "NRM" = "Natural Resource Management",
+                           "Pvt Sector & Trade" = "Private Sector and Trade",
+                           "Resilience" = "Resilience, Humanitarian and Development",
+                           "SMEs" = "SMEs and Employment Creation",
+                           "Social Protection" = "Social Protection"
 )
 
 ggplot(all_sec, aes(
-  x = reorder(nexus, n),
+  x = reorder(sector, n),
   y = n,
-  fill = nexus
+  fill = sector
 )) +
   geom_col(width = 0.5) +
   labs(title = "Number of projects funded by sector (2018-2020",
@@ -84,7 +86,7 @@ ggplot(all_sec, aes(
 
  
  resilence <- clean_data %>% 
-  filter(nexus == "Resilience Humanitarian and Development")
+  filter(sector == "Resilience Humanitarian and Development")
 
 a <- resilence %>% 
   group_by(development, project_status) %>% 
@@ -92,5 +94,10 @@ a <- resilence %>%
   pivot_wider(names_from = project_status, values_from = n, values_fill = 0)
 
 summ <- clean_data %>% 
-  group_by(date, development) %>% 
+  group_by(development) %>% 
   summarise(budget = sum(project_budget))
+
+summ1 <- clean_data %>% 
+  filter(!is.na(sector)) %>% 
+  group_by(sector) %>% 
+  summarise(budget1 = sum(project_budget))
