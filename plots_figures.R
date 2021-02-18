@@ -93,7 +93,7 @@ ggsave("sp_value.png", width = 20, height = 20, units = "cm")
 
 # Resilience: Ongoing and Completed Projects  -----------------------------
 rr_v <- clean_data %>% 
-  filter(sector == "Resilience Humanitarian and Development")
+  filter(sector == "Resilience, Humanitarian and Development")
 ggplot(rr_v, aes(development, project_budget/1000, fill = date)) + 
   geom_col(position = "dodge") + 
   theme_ipsum()+ 
@@ -108,7 +108,7 @@ ggsave("rr_value.png", width = 20, height = 20, units = "cm")
 # Governance active and completed programs (2018-2020)  -------------------
 
 gvv_v <- clean_data %>% 
-  filter(sector == "GOVernance, human rights, democracy and rule of law")
+  filter(sector == "Governance, Human Rights, Democracy and Rule of Law")
 ggplot(gvv_v, aes(development, project_budget/1000, fill = date)) + 
   geom_col(position = "dodge") + 
   theme_ipsum()+ 
@@ -126,7 +126,7 @@ ggsave("gvv_value.png", width = 20, height = 20, units = "cm")
 
 
 agric <- clean_data %>%
-  filter(sector == "Agriculture and climate change")
+  filter(sector == "Agriculture and Climate Change")
 ggplot(agric, aes(development, project_budget/1000, fill = date)) + 
   geom_col(position = "dodge") + 
   theme_ipsum()+ 
@@ -142,7 +142,7 @@ ggsave("AGRIC_value.png", width = 20, height = 20, units = "cm")
 # Natural resources management --------------------------------------------
 
 nrm <- clean_data %>%
-  filter(sector == "Natural resources management")
+  filter(sector == "Natural Resource Management")
 ggplot(nrm, aes(development, project_budget/1000, fill = date)) + 
   geom_col(position = "dodge") + 
   theme_ipsum()+ 
@@ -158,7 +158,7 @@ ggsave("nrm_value.png", width = 20, height = 20, units = "cm")
 # Education sector --------------------------------------------------------
 
 edu <- clean_data %>%
-  filter(sector == "Education sector")
+  filter(sector == "Education Sector")
 ggplot(edu, aes(development, project_budget/1000, fill = date)) + 
   geom_col(position = "dodge") + 
   theme_ipsum()+ 
@@ -174,7 +174,7 @@ ggsave("education_value.png", width = 20, height = 20, units = "cm")
 # Gender sector --------------------------------------------------------
 
 gend <- clean_data %>%
-  filter(sector == "Gender issues")
+  filter(sector == "Gender Issues")
 ggplot(gend, aes(development, project_budget/1000, fill = date)) + 
   geom_col(position = "dodge") + 
   theme_ipsum()+ 
@@ -189,7 +189,7 @@ ggsave("gend_value.png", width = 20, height = 20, units = "cm")
 # Health sector --------------------------------------------------------
 
 health <- clean_data %>%
-  filter(sector == "Health sector")
+  filter(sector == "Health Sector")
 ggplot(health, aes(development, project_budget/1000, fill = date)) + 
   geom_col(position = "dodge") + 
   theme_ipsum()+ 
@@ -205,7 +205,7 @@ ggsave("health_value.png", width = 20, height = 20, units = "cm")
 # Private sector and trade --------------------------------------------------------
 
 pvt <- clean_data %>%
-  filter(sector == "Private sector and trade")
+  filter(sector == "Private Sector and Trade")
 ggplot(pvt, aes(development, project_budget/1000, fill = date)) + 
   geom_col(position = "dodge") + 
   theme_minimal()+ 
@@ -221,7 +221,7 @@ ggsave("pvt_value.png", width = 20, height = 20, units = "cm")
 # SMEs and employment creation --------------------------------------------------------
 
 sme <- clean_data %>%
-  filter(sector == "SMEs and employment creation")
+  filter(sector == "SMEs and Employment Creation")
 ggplot(sme, aes(development, project_budget/1000, fill = date)) + 
   geom_col(position = "dodge", width = 0.5) + 
   theme_minimal()+ 
